@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cownie - Cookies e Brownies artesanais feitos com amor">
+    <title>Cownie - Cookies e Brownies Artesanais</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader__container">
+            <div class="preloader__circle" id="iconCircle"></div>
+            <div class="preloader__counter">
+                <span class="preloader__number" id="loadingNumber">0</span>
+                <span class="preloader__percent">%</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+
+    <!-- ========== NAVIGATION BAR ========== -->
+    <nav class="navbar">
+        <div class="navbar__container">
+            <div class="navbar__logo">
+                <a href="#hero">
+                    <img src="assets/images/cownie_logo_white.png" alt="Cownie"
+                        class="navbar__logo-image navbar__logo-white">
+                    <img src="assets/images/cownie_logo_brown.png" alt="Cownie"
+                        class="navbar__logo-image navbar__logo-brown">
+                </a>
+            </div>
+
+            <!-- Hamburger Menu Button -->
+            <button class="navbar__hamburger" id="hamburgerBtn" aria-label="Menu">
+                <span class="navbar__hamburger-line"></span>
+                <span class="navbar__hamburger-line"></span>
+                <span class="navbar__hamburger-line"></span>
+            </button>
+
+            <ul class="navbar__links">
+                <li><a href="#about">Sobre Nós</a></li>
+                <li><a href="#catalog">Produtos</a></li>
+                <li><a href="#social">Redes Sociais</a></li>
+                <li><a href="#footer">Contato</a></li>
+            </ul>
+        </div>
+    </nav>
+    <!-- ========== END NAVIGATION BAR ========== -->
+
+    <!-- ========== HEADER/HERO SECTION ========== -->
+    <header id="hero" class="hero">
+        <!-- Hero Video Background -->
+        <div class="hero__video-container">
+            <video class="hero__video" muted playsinline preload="auto">
+                <source src="assets/videos/hero_video2.mp4" type="video/mp4">
+                Seu navegador não suporta vídeos HTML5.
+            </video>
+        </div>
+
+        <!-- Hero Logo -->
+        <div class="hero__logo-container">
+            <div class="hero__logo-frame">
+                <img src="assets/images/cownie_logo_brown.png" alt="Cownie Logo" class="hero__logo-image">
+                <p class="hero__logo-subtitle">Cookies e Brownies</p>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 5V19M12 19L5 12M12 19L19 12" stroke="white" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
+        </div>
+    </header>
+    <!-- ========== END HEADER/HERO SECTION ========== -->
+
+    <!-- ========== MAIN CONTENT WRAPPER ========== -->
+    <div class="content-wrapper">
+        <main>
+
+            <!-- ========== ABOUT US SECTION ========== -->
+            <section id="about" class="about">
+                <div class="about__container">
+                    <div class="about__text">
+                        <h2 class="about__title">Nossa História</h2>
+                        <p class="about__description">
+                            A Cownie nasceu da paixão por criar momentos especiais através de sabores únicos.
+                            Cada cookie e brownie é preparado artesanalmente, com ingredientes cuidadosamente
+                            selecionados para proporcionar uma experiência inesquecível.
+                        </p>
+                        <p class="about__description">
+                            Nossa missão é levar felicidade e qualidade em cada mordida, transformando
+                            receitas tradicionais em verdadeiras obras de arte comestíveis.
+                        </p>
+                    </div>
+                    <div class="about__image">
+                        <!-- Placeholder for image -->
+                        <div class="about__image-placeholder">
+                            [Imagem Ilustrativa]
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- ========== END ABOUT US SECTION ========== -->
+
+            <!-- ========== CATALOG/PRODUCTS SECTION ========== -->
+            <section id="catalog" class="catalog">
+                <div class="catalog__container">
+                    <h2 class="catalog__title">Nossos Produtos</h2>
+                    <p class="catalog__subtitle">Descubra nossos sabores irresistíveis</p>
+
+                    <!-- Products Grid -->
+                    <div class="catalog__grid">
+
+                        <!-- Product Card 1 -->
+                        <article class="catalog__card">
+                            <div class="catalog__card-image">
+                                [Imagem do Produto]
+                            </div>
+                            <div class="catalog__card-content">
+                                <h3 class="catalog__card-title">Cookie de Chocolate</h3>
+                                <p class="catalog__card-description">
+                                    Delicioso cookie com gotas de chocolate belga
+                                </p>
+                                <p class="catalog__card-price">R$ 8,00</p>
+                                <button class="catalog__card-button">Encomendar</button>
+                            </div>
+                        </article>
+
+                        <!-- Product Card 2 -->
+                        <article class="catalog__card">
+                            <div class="catalog__card-image">
+                                [Imagem do Produto]
+                            </div>
+                            <div class="catalog__card-content">
+                                <h3 class="catalog__card-title">Brownie Tradicional</h3>
+                                <p class="catalog__card-description">
+                                    Brownie cremoso com cobertura de chocolate
+                                </p>
+                                <p class="catalog__card-price">R$ 10,00</p>
+                                <button class="catalog__card-button">Encomendar</button>
+                            </div>
+                        </article>
+
+                        <!-- Product Card 3 -->
+                        <article class="catalog__card">
+                            <div class="catalog__card-image">
+                                [Imagem do Produto]
+                            </div>
+                            <div class="catalog__card-content">
+                                <h3 class="catalog__card-title">Cookie Red Velvet</h3>
+                                <p class="catalog__card-description">
+                                    Cookie especial com massa red velvet e cream cheese
+                                </p>
+                                <p class="catalog__card-price">R$ 9,00</p>
+                                <button class="catalog__card-button">Encomendar</button>
+                            </div>
+                        </article>
+
+                    </div>
+                </div>
+            </section>
+            <!-- ========== END CATALOG/PRODUCTS SECTION ========== -->
+
+            <!-- ========== SOCIAL MEDIA SECTION ========== -->
+            <section id="social" class="social">
+                <div class="social__container">
+                    <h2 class="social__title">Siga-nos no Instagram</h2>
+                    <p class="social__subtitle">
+                        Acompanhe nossos lançamentos, promoções e os bastidores da Cownie
+                    </p>
+
+                    <!-- Social Links Placeholder -->
+                    <div class="social__links">
+                        <a href="#" class="social__link" aria-label="Instagram">
+                            [Ícone Instagram]
+                        </a>
+                        <a href="#" class="social__link" aria-label="Facebook">
+                            [Ícone Facebook]
+                        </a>
+                        <a href="#" class="social__link" aria-label="WhatsApp">
+                            [Ícone WhatsApp]
+                        </a>
+                    </div>
+                </div>
+            </section>
+            <!-- ========== END SOCIAL MEDIA SECTION ========== -->
+
+        </main>
+
+        <!-- ========== FOOTER SECTION ========== -->
+        <footer id="footer" class="footer">
+            <div class="footer__container">
+
+                <!-- Contact Information -->
+                <div class="footer__section">
+                    <h3 class="footer__title">Contato</h3>
+                    <p class="footer__text">Email: contato@cownie.com.br</p>
+                    <p class="footer__text">Telefone: (11) 99999-9999</p>
+                    <p class="footer__text">WhatsApp: (11) 98888-8888</p>
+                </div>
+
+                <!-- Useful Links -->
+                <div class="footer__section">
+                    <h3 class="footer__title">Links Úteis</h3>
+                    <ul class="footer__links">
+                        <li><a href="#about">Sobre Nós</a></li>
+                        <li><a href="#catalog">Produtos</a></li>
+                        <li><a href="#social">Redes Sociais</a></li>
+                    </ul>
+                </div>
+
+                <!-- Business Hours -->
+                <div class="footer__section">
+                    <h3 class="footer__title">Horário de Atendimento</h3>
+                    <p class="footer__text">Segunda a Sexta: 9h às 18h</p>
+                    <p class="footer__text">Sábado: 9h às 14h</p>
+                    <p class="footer__text">Domingo: Fechado</p>
+                </div>
+
+            </div>
+
+            <!-- Copyright -->
+            <div class="footer__copyright">
+                <p>&copy; 2026 Cownie. Todos os direitos reservados.</p>
+            </div>
+        </footer>
+        <!-- ========== END FOOTER SECTION ========== -->
+    </div>
+    <!-- ========== END MAIN CONTENT WRAPPER ========== -->
+
+    <script src="script.js"></script>
+</body>
+
+</html>
