@@ -94,78 +94,143 @@ class Preloader {
 // SCROLLYTELLING - Hero Video Control
 // ========================================
 
-class ScrollytellingVideo {
-    constructor(videoSelector, containerSelector) {
-        this.video = document.querySelector(videoSelector);
+class ScrollytellingFrames {
+    constructor(canvasSelector, containerSelector) {
+        this.canvas = document.querySelector(canvasSelector);
         this.container = document.querySelector(containerSelector);
-        this.isReady = false;
+        // Fallback or setup context
+        this.context = this.canvas ? this.canvas.getContext('2d') : null;
 
-        // LERP State
-        this.targetTime = 0;
-        this.currentTime = 0;
-        this.lerpSpeed = 0.1; // 10% movement per frame = smooth catchup
+        // Configuration
+        this.frameCount = 98; // Total frames
+        this.images = [];
+        this.imagesLoaded = 0;
+        this.currentFrame = 0;
 
-        // Bind update loop
-        this.update = this.update.bind(this);
+        // Path configuration: assets/videos/frames_video_hero/ezgif-frame-XXX.jpg
+        this.basePath = 'assets/videos/frames_video_hero/ezgif-frame-';
 
-        this.init();
+        // Bind methods
+        this.updateFrame = this.updateFrame.bind(this);
+        this.handleResize = this.handleResize.bind(this);
+
+        if (this.canvas && this.container) {
+            this.init();
+        } else {
+            console.error('Canvas or Container not found for ScrollytellingFrames');
+        }
     }
 
     init() {
-        // Wait for video metadata to load
-        if (this.video.readyState >= 1) {
-            this.start();
-        } else {
-            this.video.addEventListener('loadedmetadata', () => {
-                this.start();
-            });
+        this.preloadImages();
+        this.attachListeners();
+        this.handleResize(); // Set initial size
+    }
+
+    preloadImages() {
+        console.log('Starting frame preload...');
+        for (let i = 1; i <= this.frameCount; i++) {
+            const img = new Image();
+            // Pad with leading zeros: 1 -> 001, 10 -> 010, 98 -> 098
+            const paddedIndex = i.toString().padStart(3, '0');
+            const src = `${this.basePath}${paddedIndex}.jpg`;
+
+            img.src = src;
+            img.onload = () => {
+                this.imagesLoaded++;
+                if (this.imagesLoaded === this.frameCount) {
+                    console.log('All frames loaded!');
+                    // Draw first frame immediately
+                    this.drawFrame(0);
+                }
+            };
+            img.onerror = () => {
+                console.warn(`Failed to load frame: ${src}`);
+            };
+            this.images.push(img);
         }
-
-        // Start listening to scroll to set TARGETS only
-        this.attachScrollListener();
     }
 
-    start() {
-        this.isReady = true;
-        console.log('Video ready for smooth scrollytelling');
-        this.video.pause();
-        this.video.currentTime = 0;
-
-        // Start the render loop
-        this.update();
-    }
-
-    attachScrollListener() {
+    attachListeners() {
         window.addEventListener('scroll', () => {
-            if (!this.container) return;
+            window.requestAnimationFrame(this.updateFrame);
+        });
 
-            // Calculate target time based on scroll
-            const scrollY = window.scrollY || window.pageYOffset;
-            const containerHeight = this.container.offsetHeight;
-            let progress = scrollY / containerHeight;
-            progress = Math.max(0, Math.min(1, progress));
-
-            // Set TARGET, don't update video yet
-            if (this.video.duration) {
-                this.targetTime = progress * this.video.duration;
-            }
-        }, { passive: true });
+        window.addEventListener('resize', () => {
+            this.handleResize();
+            this.drawFrame(this.currentFrame); // Redraw
+        });
     }
 
-    update() {
-        if (this.isReady && this.video.duration) {
-            // LERP: Move current towards target
-            // current = current + (target - current) * speed
-            this.currentTime += (this.targetTime - this.currentTime) * this.lerpSpeed;
+    handleResize() {
+        if (!this.canvas || !this.container) return;
 
-            // Update video only if significant change to save resources
-            if (Math.abs(this.targetTime - this.currentTime) > 0.001) {
-                this.video.currentTime = this.currentTime;
-            }
+        // Make canvas fill the container exactly (for resolution)
+        const width = this.container.offsetWidth;
+        const height = this.container.offsetHeight;
+
+        this.canvas.width = width;
+        this.canvas.height = height;
+    }
+
+    updateFrame() {
+        if (!this.container) return;
+
+        const scrollY = window.scrollY || window.pageYOffset;
+        const containerHeight = this.container.offsetHeight;
+
+        // Calculate progress (0 to 1)
+        let progress = scrollY / containerHeight;
+        progress = Math.max(0, Math.min(1, progress));
+
+        // Map to frame index (0 to 97)
+        // Ensure we don't go out of bounds
+        const maxIndex = this.frameCount - 1;
+        const frameIndex = Math.floor(progress * maxIndex);
+
+        if (frameIndex !== this.currentFrame) {
+            this.currentFrame = frameIndex;
+            this.drawFrame(frameIndex);
+        }
+    }
+
+    drawFrame(index) {
+        // Safety check
+        if (!this.images[index] || !this.images[index].complete) return;
+        if (!this.context || !this.canvas) return;
+
+        const img = this.images[index];
+        const ctx = this.context;
+        const canvas = this.canvas;
+
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // "Object-fit: cover" logic for Canvas
+        const imgRatio = img.width / img.height;
+        const canvasRatio = canvas.width / canvas.height;
+
+        let drawWidth, drawHeight, offsetX, offsetY;
+
+        if (canvasRatio > imgRatio) {
+            // Canvas is wider than image -> fit width, crop height
+            drawWidth = canvas.width;
+            drawHeight = drawWidth / imgRatio;
+            offsetX = 0;
+            offsetY = (canvas.height - drawHeight) / 2;
+        } else {
+            // Canvas is taller than image -> fit height, crop width
+            drawHeight = canvas.height;
+            drawWidth = drawHeight * imgRatio;
+            offsetX = (canvas.width - drawWidth) / 2;
+            offsetY = 0;
         }
 
-        // Keep looping
-        window.requestAnimationFrame(this.update);
+        try {
+            ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+        } catch (e) {
+            console.warn('Error drawing frame', e);
+        }
     }
 }
 
@@ -626,8 +691,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize preloader
     new Preloader();
 
-    // Initialize Scrollytelling Video
-    new ScrollytellingVideo('.hero__video', '.hero');
+    // Initialize Scrollytelling Frames (Canvas)
+    new ScrollytellingFrames('#hero-canvas', '.hero');
 
     // Initialize custom cursor (only on desktop)
     if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {

@@ -540,7 +540,8 @@ h6 {
     overflow: hidden;
 }
 
-.hero__video {
+.hero__video,
+.hero__canvas {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -550,6 +551,7 @@ h6 {
     height: auto;
     transform: translate(-50%, -50%);
     object-fit: cover;
+    /* Works for video, canvas needs JS handling but good fallback */
 }
 
 .hero__logo-container {
