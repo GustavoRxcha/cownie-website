@@ -575,7 +575,7 @@ h6 {
 }
 
 .hero__logo-image {
-    width: 280px;
+    width: 560px;
     height: auto;
     max-width: 60vw;
     filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
