@@ -95,79 +95,77 @@ class Preloader {
 // ========================================
 
 class ScrollytellingVideo {
-    constructor(videoElement, containerElement) {
-        this.video = videoElement;
-        this.container = containerElement;
+    constructor(videoSelector, containerSelector) {
+        this.video = document.querySelector(videoSelector);
+        this.container = document.querySelector(containerSelector);
         this.isReady = false;
-        this.ticking = false;
+
+        // LERP State
+        this.targetTime = 0;
+        this.currentTime = 0;
+        this.lerpSpeed = 0.1; // 10% movement per frame = smooth catchup
+
+        // Bind update loop
+        this.update = this.update.bind(this);
 
         this.init();
     }
 
     init() {
         // Wait for video metadata to load
-        this.video.addEventListener('loadedmetadata', () => {
-            this.isReady = true;
-            console.log('Video ready for scrollytelling');
-
-            // Set initial state
-            this.video.pause();
-            this.video.currentTime = 0;
-
-            // Start listening to scroll
-            this.attachScrollListener();
-
-            // Initial update
-            this.updateVideoProgress();
-        });
-
-        // Force load if already loaded
-        if (this.video.readyState >= 2) {
-            this.isReady = true;
-            this.video.pause();
-            this.video.currentTime = 0;
-            this.attachScrollListener();
-            this.updateVideoProgress();
+        if (this.video.readyState >= 1) {
+            this.start();
+        } else {
+            this.video.addEventListener('loadedmetadata', () => {
+                this.start();
+            });
         }
+
+        // Start listening to scroll to set TARGETS only
+        this.attachScrollListener();
+    }
+
+    start() {
+        this.isReady = true;
+        console.log('Video ready for smooth scrollytelling');
+        this.video.pause();
+        this.video.currentTime = 0;
+
+        // Start the render loop
+        this.update();
     }
 
     attachScrollListener() {
         window.addEventListener('scroll', () => {
-            if (!this.ticking) {
-                window.requestAnimationFrame(() => {
-                    this.updateVideoProgress();
-                    this.ticking = false;
-                });
-                this.ticking = true;
+            if (!this.container) return;
+
+            // Calculate target time based on scroll
+            const scrollY = window.scrollY || window.pageYOffset;
+            const containerHeight = this.container.offsetHeight;
+            let progress = scrollY / containerHeight;
+            progress = Math.max(0, Math.min(1, progress));
+
+            // Set TARGET, don't update video yet
+            if (this.video.duration) {
+                this.targetTime = progress * this.video.duration;
             }
-        });
+        }, { passive: true });
     }
 
-    updateVideoProgress() {
-        if (!this.isReady) return;
+    update() {
+        if (this.isReady && this.video.duration) {
+            // LERP: Move current towards target
+            // current = current + (target - current) * speed
+            this.currentTime += (this.targetTime - this.currentTime) * this.lerpSpeed;
 
-        // Get current scroll position
-        const scrollY = window.scrollY || window.pageYOffset;
+            // Update video only if significant change to save resources
+            if (Math.abs(this.targetTime - this.currentTime) > 0.001) {
+                this.video.currentTime = this.currentTime;
+            }
+        }
 
-        // Get container height (the hero section height)
-        const containerHeight = this.container.offsetHeight;
-
-        // Calculate progress based on how much we've scrolled
-        // Video should progress from 0% to 100% as we scroll through the hero height
-        let progress = scrollY / containerHeight;
-
-        // Clamp between 0 and 1
-        progress = Math.max(0, Math.min(1, progress));
-
-        // Map progress to video time
-        const videoDuration = this.video.duration;
-        const targetTime = progress * videoDuration;
-
-        // Update video current time
-        this.video.currentTime = targetTime;
-
-        // Debug (optional - remove in production)
-        // console.log(`Scroll: ${scrollY}px | Progress: ${(progress * 100).toFixed(1)}% | Video Time: ${targetTime.toFixed(2)}s`);
+        // Keep looping
+        window.requestAnimationFrame(this.update);
     }
 }
 
@@ -445,6 +443,182 @@ class FlipBook {
 }
 
 // ========================================
+// SCROLLYTELLING - Flip Book Control
+// ========================================
+
+class ScrollytellingFlipBook {
+    constructor() {
+        this.catalogSection = document.getElementById('catalog');
+        this.catalogContainer = document.querySelector('.catalog__container');
+        this.flipBook = document.querySelector('.flipbook__book');
+        this.pages = document.querySelectorAll('.flipbook__page');
+
+        // Estados
+        this.isPinned = false;
+        this.currentProgress = 0; // 0 a 1
+        this.totalPages = this.pages.length; // 3
+        this.currentPageIndex = 0;
+
+        // Posições calculadas
+        this.pinStartY = 0;
+        this.pinEndY = 0;
+        this.scrollHeight = 0;
+
+        // Throttling
+        this.ticking = false;
+
+        this.init();
+    }
+
+    init() {
+        if (!this.catalogSection || !this.pages.length) {
+            console.warn('ScrollytellingFlipBook: elementos não encontrados');
+            return;
+        }
+
+        this.calculatePositions();
+        this.attachScrollListener();
+
+        // Recalcular posições ao redimensionar
+        window.addEventListener('resize', () => {
+            this.calculatePositions();
+        });
+    }
+
+    calculatePositions() {
+        // Início do pin: quando seção atinge o topo
+        this.pinStartY = this.catalogSection.offsetTop;
+
+        // Altura de scroll para folhear todas as páginas (300vh)
+        this.scrollHeight = window.innerHeight * 3;
+
+        // Fim do pin: início + altura de scroll
+        this.pinEndY = this.pinStartY + this.scrollHeight;
+
+        console.log(`ScrollytellingFlipBook: Pin de ${this.pinStartY}px a ${this.pinEndY}px`);
+    }
+
+    attachScrollListener() {
+        window.addEventListener('scroll', () => {
+            if (!this.ticking) {
+                window.requestAnimationFrame(() => {
+                    this.onScroll();
+                    this.ticking = false;
+                });
+                this.ticking = true;
+            }
+        });
+    }
+
+    onScroll() {
+        const scrollY = window.scrollY || window.pageYOffset;
+
+        // Antes do pin
+        if (scrollY < this.pinStartY) {
+            this.unpin();
+            this.setProgress(0);
+            return;
+        }
+
+        // Depois do pin
+        if (scrollY > this.pinEndY) {
+            this.unpin();
+            this.setProgress(1); // Última página
+            return;
+        }
+
+        // Durante o pin
+        this.pin();
+
+        // Calcular progresso (0 a 1)
+        const scrollInSection = scrollY - this.pinStartY;
+        const progress = scrollInSection / this.scrollHeight;
+        this.setProgress(progress);
+    }
+
+    pin() {
+        if (!this.isPinned) {
+            this.catalogSection.classList.add('pinned');
+            this.isPinned = true;
+            console.log('ScrollytellingFlipBook: Pinned');
+        }
+    }
+
+    unpin() {
+        if (this.isPinned) {
+            this.catalogSection.classList.remove('pinned');
+            this.isPinned = false;
+            console.log('ScrollytellingFlipBook: Unpinned');
+        }
+    }
+
+    setProgress(progress) {
+        // Clamp entre 0 e 1
+        progress = Math.max(0, Math.min(1, progress));
+        this.currentProgress = progress;
+
+        // Mapear progresso para páginas
+        // 0 - 0.33 = página 0 (capa)
+        // 0.33 - 0.66 = página 1
+        // 0.66 - 1.0 = página 2 (contracapa)
+        const pageFloat = progress * this.totalPages;
+        const pageIndex = Math.floor(pageFloat);
+        const clampedPageIndex = Math.min(pageIndex, this.totalPages - 1);
+
+        // Progresso dentro da página atual (0 a 1)
+        const pageProgress = pageFloat - pageIndex;
+
+        // Folhear até a página calculada
+        this.flipToPage(clampedPageIndex, pageProgress);
+    }
+
+    flipToPage(targetPage, pageProgress = 1) {
+        // Virar todas as páginas até a target
+        this.pages.forEach((page, index) => {
+            if (index < targetPage) {
+                // Páginas anteriores: totalmente viradas
+                page.classList.add('flipped');
+                page.style.transform = 'rotateY(-180deg)';
+            } else if (index === targetPage && pageProgress > 0 && pageProgress < 1) {
+                // Página atual: transição parcial para suavidade
+                page.classList.remove('flipped');
+                const rotation = -180 * pageProgress;
+                page.style.transform = `rotateY(${rotation}deg)`;
+            } else if (index === targetPage && pageProgress >= 1) {
+                // Página atual totalmente virada
+                page.classList.add('flipped');
+                page.style.transform = 'rotateY(-180deg)';
+            } else {
+                // Páginas posteriores: não viradas
+                page.classList.remove('flipped');
+                page.style.transform = 'rotateY(0deg)';
+            }
+        });
+
+        // Atualizar indicador de página apenas se mudou
+        if (this.currentPageIndex !== targetPage) {
+            this.currentPageIndex = targetPage;
+            const displayPage = targetPage + 1;
+            const currentPageEl = document.getElementById('currentPage');
+            if (currentPageEl) {
+                currentPageEl.textContent = displayPage;
+            }
+        }
+    }
+}
+
+// ========================================
+// CATALOG SCROLLYTELLING - Scroll-driven Page Flipping
+// ========================================
+
+/* 
+// MOVED TO scrollytelling-lock.js
+class CatalogScrollytelling {
+    // ... (Conflicting implementation removed/commented to prioritize scrollytelling-lock.js)
+}
+*/
+
+// ========================================
 // INITIALIZATION
 // ========================================
 
@@ -452,12 +626,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize preloader
     new Preloader();
 
-    const heroVideo = document.querySelector('.hero__video');
-    const heroContainer = document.querySelector('.hero');
-
-    if (heroVideo && heroContainer) {
-        new ScrollytellingVideo(heroVideo, heroContainer);
-    }
+    // Initialize Scrollytelling Video
+    new ScrollytellingVideo('.hero__video', '.hero');
 
     // Initialize custom cursor (only on desktop)
     if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
@@ -472,4 +642,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize flip book
     new FlipBook();
+
+    // Initialize catalog scrollytelling - MOVED TO scrollytelling-lock.js
+    // new CatalogScrollytelling();
 });
