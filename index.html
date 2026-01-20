@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Cownie - Cookies e Brownies artesanais feitos com amor">
     <title>Cownie - Cookies e Brownies Artesanais</title>
+    <link rel="icon" type="image/png" href="medias/icon_cownie.png">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -112,60 +113,142 @@
             </section>
             <!-- ========== END ABOUT US SECTION ========== -->
 
-            <!-- ========== CATALOG/PRODUCTS SECTION ========== -->
+            <!-- ========== CATALOG/PRODUCTS SECTION (FLIP BOOK) ========== -->
             <section id="catalog" class="catalog">
                 <div class="catalog__container">
                     <h2 class="catalog__title">Nossos Produtos</h2>
-                    <p class="catalog__subtitle">Descubra nossos sabores irresistíveis</p>
+                    <p class="catalog__subtitle">Folheie nosso catálogo interativo</p>
 
-                    <!-- Products Grid -->
-                    <div class="catalog__grid">
+                    <!-- Flip Book Container -->
+                    <div class="flipbook">
+                        <div class="flipbook__wrapper">
+                            <!-- Book Container -->
+                            <div class="flipbook__book" id="flipBook">
 
-                        <!-- Product Card 1 -->
-                        <article class="catalog__card">
-                            <div class="catalog__card-image">
-                                [Imagem do Produto]
-                            </div>
-                            <div class="catalog__card-content">
-                                <h3 class="catalog__card-title">Cookie de Chocolate</h3>
-                                <p class="catalog__card-description">
-                                    Delicioso cookie com gotas de chocolate belga
-                                </p>
-                                <p class="catalog__card-price">R$ 8,00</p>
-                                <button class="catalog__card-button">Encomendar</button>
-                            </div>
-                        </article>
+                                <!-- Page 1: Cover (Front) / Cookie de Chocolate (Back) -->
+                                <div class="flipbook__page" data-page="0">
+                                    <!-- Front: Cover -->
+                                    <div class="flipbook__page-front">
+                                        <div class="flipbook__page-content flipbook__page-content--cover">
+                                            <img src="assets/images/cownie_logo_brown.svg" alt="Cownie Logo"
+                                                class="flipbook__cover-logo">
+                                            <h3 class="flipbook__cover-title">Cownie</h3>
+                                            <p class="flipbook__cover-subtitle">Cookies e Brownies Artesanais</p>
+                                            <div class="flipbook__cover-hint">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                </svg>
+                                                <span>Clique para folhear</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Back: Cookie de Chocolate -->
+                                    <div class="flipbook__page-back">
+                                        <div class="flipbook__page-content">
+                                            <div class="flipbook__product-image">
+                                                <div class="flipbook__product-placeholder">
+                                                    🍪
+                                                </div>
+                                            </div>
+                                            <div class="flipbook__product-info">
+                                                <h3 class="flipbook__product-title">Cookie de Chocolate</h3>
+                                                <p class="flipbook__product-description">
+                                                    Delicioso cookie com gotas de chocolate belga, massa crocante por
+                                                    fora e macia por dentro.
+                                                </p>
+                                                <p class="flipbook__product-price">R$ 8,00</p>
+                                                <button class="flipbook__product-button">Encomendar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                        <!-- Product Card 2 -->
-                        <article class="catalog__card">
-                            <div class="catalog__card-image">
-                                [Imagem do Produto]
-                            </div>
-                            <div class="catalog__card-content">
-                                <h3 class="catalog__card-title">Brownie Tradicional</h3>
-                                <p class="catalog__card-description">
-                                    Brownie cremoso com cobertura de chocolate
-                                </p>
-                                <p class="catalog__card-price">R$ 10,00</p>
-                                <button class="catalog__card-button">Encomendar</button>
-                            </div>
-                        </article>
+                                <!-- Page 2: Brownie Tradicional (Front) / Cookie Red Velvet (Back) -->
+                                <div class="flipbook__page" data-page="1">
+                                    <!-- Front: Brownie Tradicional -->
+                                    <div class="flipbook__page-front">
+                                        <div class="flipbook__page-content">
+                                            <div class="flipbook__product-image">
+                                                <div class="flipbook__product-placeholder">
+                                                    🍫
+                                                </div>
+                                            </div>
+                                            <div class="flipbook__product-info">
+                                                <h3 class="flipbook__product-title">Brownie Tradicional</h3>
+                                                <p class="flipbook__product-description">
+                                                    Brownie cremoso com cobertura de chocolate, textura perfeita e sabor
+                                                    intenso.
+                                                </p>
+                                                <p class="flipbook__product-price">R$ 10,00</p>
+                                                <button class="flipbook__product-button">Encomendar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Back: Cookie Red Velvet -->
+                                    <div class="flipbook__page-back">
+                                        <div class="flipbook__page-content">
+                                            <div class="flipbook__product-image">
+                                                <div class="flipbook__product-placeholder">
+                                                    ❤️
+                                                </div>
+                                            </div>
+                                            <div class="flipbook__product-info">
+                                                <h3 class="flipbook__product-title">Cookie Red Velvet</h3>
+                                                <p class="flipbook__product-description">
+                                                    Cookie especial com massa red velvet e recheio de cream cheese
+                                                    irresistível.
+                                                </p>
+                                                <p class="flipbook__product-price">R$ 9,00</p>
+                                                <button class="flipbook__product-button">Encomendar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                        <!-- Product Card 3 -->
-                        <article class="catalog__card">
-                            <div class="catalog__card-image">
-                                [Imagem do Produto]
-                            </div>
-                            <div class="catalog__card-content">
-                                <h3 class="catalog__card-title">Cookie Red Velvet</h3>
-                                <p class="catalog__card-description">
-                                    Cookie especial com massa red velvet e cream cheese
-                                </p>
-                                <p class="catalog__card-price">R$ 9,00</p>
-                                <button class="catalog__card-button">Encomendar</button>
-                            </div>
-                        </article>
+                                <!-- Page 3: Back Cover (Front) / Empty (Back) -->
+                                <div class="flipbook__page flipbook__page--last" data-page="2">
+                                    <!-- Front: Back Cover -->
+                                    <div class="flipbook__page-front">
+                                        <div class="flipbook__page-content flipbook__page-content--back">
+                                            <h3 class="flipbook__back-title">Cownie</h3>
+                                            <p class="flipbook__back-text">Feito com amor ❤️</p>
+                                            <p class="flipbook__back-contact">@cownie.oficial</p>
+                                        </div>
+                                    </div>
+                                    <!-- Back: Empty (not visible) -->
+                                    <div class="flipbook__page-back">
+                                        <div class="flipbook__page-content">
+                                        </div>
+                                    </div>
+                                </div>
 
+                            </div>
+
+                            <!-- Navigation Controls -->
+                            <div class="flipbook__controls">
+                                <button class="flipbook__control flipbook__control--prev" id="prevPage"
+                                    aria-label="Página anterior">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </button>
+                                <div class="flipbook__page-indicator">
+                                    <span id="currentPage">1</span> / <span id="totalPages">3</span>
+                                </div>
+                                <button class="flipbook__control flipbook__control--next" id="nextPage"
+                                    aria-label="Próxima página">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

@@ -681,7 +681,7 @@ h6 {
 }
 
 /* ========================================
-   CATALOG SECTION
+   CATALOG SECTION - FLIP BOOK
    ======================================== */
 
 .catalog {
@@ -705,79 +705,392 @@ h6 {
     color: var(--color-primary);
 }
 
-.catalog__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--spacing-lg);
-}
-
-.catalog__card {
-    background-color: var(--color-white);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-lg);
-    transition: all 0.3s ease;
-}
-
-.catalog__card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: var(--shadow-xl);
-}
-
-.catalog__card-image {
+/* Flip Book Container */
+.flipbook {
     width: 100%;
-    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-xl) 0;
+}
+
+.flipbook__wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+}
+
+.flipbook__book {
+    position: relative;
+    width: 700px;
+    height: 500px;
+    margin: 0 auto;
+    perspective: 2000px;
+    transform-style: preserve-3d;
+}
+
+/* Individual Pages */
+.flipbook__page {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    top: 0;
+    right: 0;
+    background: var(--color-white);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    box-shadow:
+        0 0 0 1px rgba(59, 38, 24, 0.1),
+        var(--shadow-lg);
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+    cursor: pointer;
+    backface-visibility: hidden;
+}
+
+/* Z-index for proper stacking order */
+.flipbook__page[data-page="0"] {
+    z-index: 3;
+}
+
+.flipbook__page[data-page="1"] {
+    z-index: 2;
+}
+
+.flipbook__page[data-page="2"] {
+    z-index: 1;
+}
+
+/* Page Front and Back Faces */
+.flipbook__page-front,
+.flipbook__page-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: var(--color-white);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    box-shadow:
+        0 0 0 1px rgba(59, 38, 24, 0.1),
+        var(--shadow-lg);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/* Front face (visible by default) */
+.flipbook__page-front {
+    transform: rotateY(0deg);
+}
+
+/* Back face (rotated 180deg, will be visible when page flips) */
+.flipbook__page-back {
+    transform: rotateY(180deg);
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+/* Page States */
+.flipbook__page.flipped {
+    transform: rotateY(-180deg);
+    pointer-events: none;
+}
+
+.flipbook__page:hover:not(.flipped) {
+    box-shadow:
+        0 0 0 1px rgba(59, 38, 24, 0.15),
+        var(--shadow-xl),
+        0 0 20px rgba(232, 188, 133, 0.3);
+}
+
+/* Page Content */
+.flipbook__page-content {
+    width: 100%;
+    height: 100%;
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Cover Page Styles */
+.flipbook__page--cover .flipbook__page-content--cover {
+    background: linear-gradient(135deg, #FDF6E9 0%, #F5E6D3 100%);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.flipbook__cover-logo {
+    width: 200px;
+    height: auto;
+    margin-bottom: var(--spacing-md);
+    filter: drop-shadow(0 4px 8px rgba(59, 38, 24, 0.1));
+}
+
+.flipbook__cover-title {
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.flipbook__cover-subtitle {
+    font-family: var(--font-body);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-lg);
+    opacity: 0.8;
+}
+
+.flipbook__cover-hint {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: var(--color-cta);
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: var(--spacing-md);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    50% {
+        opacity: 0.6;
+        transform: translateX(5px);
+    }
+}
+
+/* Product Page Styles */
+.flipbook__product-image {
+    width: 100%;
+    height: 200px;
+    margin-bottom: var(--spacing-md);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.flipbook__product-placeholder {
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     background: linear-gradient(135deg, var(--color-accent) 0%, #D4A574 100%);
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--color-primary);
+    font-size: 80px;
 }
 
-.catalog__card-content {
-    padding: var(--spacing-md);
+.flipbook__product-info {
+    width: 100%;
+    text-align: center;
 }
 
-.catalog__card-title {
-    font-size: 26px;
+.flipbook__product-title {
+    font-family: var(--font-heading);
+    font-size: 28px;
     font-weight: 700;
-    margin-bottom: var(--spacing-sm);
     color: var(--color-primary);
+    margin-bottom: var(--spacing-sm);
 }
 
-.catalog__card-description {
-    margin-bottom: var(--spacing-md);
-    font-size: 16px;
+.flipbook__product-description {
+    font-size: 15px;
     line-height: 1.6;
     color: var(--color-primary);
-}
-
-.catalog__card-price {
-    font-size: 32px;
-    font-weight: 700;
     margin-bottom: var(--spacing-md);
-    color: var(--color-cta);
-    font-family: var(--font-heading);
+    opacity: 0.9;
 }
 
-.catalog__card-button {
+.flipbook__product-price {
+    font-family: var(--font-heading);
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--color-cta);
+    margin-bottom: var(--spacing-md);
+}
+
+.flipbook__product-button {
     width: 100%;
-    padding: 14px;
+    padding: 14px 24px;
     background-color: var(--color-cta);
     color: var(--color-white);
     font-weight: 600;
     font-size: 16px;
     border-radius: var(--radius-full);
     box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
 }
 
-.catalog__card-button:hover {
+.flipbook__product-button:hover {
     background-color: #C56A05;
-    transform: scale(1.03);
+    transform: scale(1.05);
     box-shadow: var(--shadow-md);
 }
+
+/* Back Cover Styles */
+.flipbook__page--back .flipbook__page-content--back {
+    background: linear-gradient(135deg, #3B2618 0%, #2A1810 100%);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.flipbook__back-title {
+    font-family: var(--font-heading);
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--color-background);
+    margin-bottom: var(--spacing-md);
+}
+
+.flipbook__back-text {
+    font-size: 18px;
+    color: var(--color-background);
+    margin-bottom: var(--spacing-sm);
+    opacity: 0.9;
+}
+
+.flipbook__back-contact {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-accent);
+}
+
+/* Navigation Controls */
+.flipbook__controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+}
+
+.flipbook__control {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+}
+
+.flipbook__control:hover:not(:disabled) {
+    background-color: var(--color-cta);
+    transform: scale(1.1);
+    box-shadow: var(--shadow-lg);
+}
+
+.flipbook__control:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.flipbook__page-indicator {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-primary);
+    min-width: 80px;
+    text-align: center;
+}
+
+/* Mobile Responsive - Flip Book */
+@media (max-width: 768px) {
+    .flipbook__book {
+        width: 90vw;
+        max-width: 500px;
+        height: 400px;
+    }
+
+    .flipbook__cover-logo {
+        width: 150px;
+    }
+
+    .flipbook__cover-title {
+        font-size: 36px;
+    }
+
+    .flipbook__cover-subtitle {
+        font-size: 16px;
+    }
+
+    .flipbook__product-image {
+        height: 150px;
+    }
+
+    .flipbook__product-placeholder {
+        font-size: 60px;
+    }
+
+    .flipbook__product-title {
+        font-size: 22px;
+    }
+
+    .flipbook__product-description {
+        font-size: 14px;
+    }
+
+    .flipbook__product-price {
+        font-size: 28px;
+    }
+
+    .flipbook__control {
+        width: 45px;
+        height: 45px;
+    }
+}
+
+@media (max-width: 480px) {
+    .flipbook__book {
+        height: 350px;
+    }
+
+    .flipbook__cover-logo {
+        width: 120px;
+    }
+
+    .flipbook__cover-title {
+        font-size: 28px;
+    }
+
+    .flipbook__cover-subtitle {
+        font-size: 14px;
+    }
+
+    .flipbook__product-image {
+        height: 120px;
+    }
+
+    .flipbook__product-placeholder {
+        font-size: 50px;
+    }
+
+    .flipbook__product-title {
+        font-size: 20px;
+    }
+
+    .flipbook__product-description {
+        font-size: 13px;
+    }
+
+    .flipbook__product-price {
+        font-size: 24px;
+    }
+
+    .flipbook__page-content {
+        padding: var(--spacing-md);
+    }
+}
+
 
 /* ========================================
    SOCIAL SECTION

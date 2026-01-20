@@ -328,6 +328,123 @@ class MobileMenu {
 }
 
 // ========================================
+// FLIP BOOK - Interactive Page Turning
+// ========================================
+
+class FlipBook {
+    constructor() {
+        this.book = document.getElementById('flipBook');
+        this.pages = Array.from(document.querySelectorAll('.flipbook__page'));
+        this.prevBtn = document.getElementById('prevPage');
+        this.nextBtn = document.getElementById('nextPage');
+        this.currentPageIndicator = document.getElementById('currentPage');
+        this.totalPagesIndicator = document.getElementById('totalPages');
+
+        if (!this.book || this.pages.length === 0) {
+            console.error('FlipBook elements not found');
+            return;
+        }
+
+        this.currentPage = 0;
+        this.totalPages = this.pages.length;
+
+        this.init();
+    }
+
+    init() {
+        // Set initial state
+        this.updateIndicators();
+        this.updateButtons();
+
+        // Add event listeners to navigation buttons
+        this.prevBtn.addEventListener('click', () => this.previousPage());
+        this.nextBtn.addEventListener('click', () => this.nextPage());
+
+        // Add click event to pages for flipping
+        this.pages.forEach((page, index) => {
+            page.addEventListener('click', () => {
+                if (!page.classList.contains('flipped')) {
+                    this.goToPage(index + 1);
+                }
+            });
+        });
+
+        console.log('FlipBook initialized with', this.totalPages, 'pages');
+    }
+
+    nextPage() {
+        if (this.currentPage < this.totalPages - 1) {
+            this.currentPage++;
+            this.flipPage(this.currentPage - 1);
+            this.updateIndicators();
+            this.updateButtons();
+        }
+    }
+
+    previousPage() {
+        if (this.currentPage > 0) {
+            this.currentPage--;
+            this.unflipPage(this.currentPage);
+            this.updateIndicators();
+            this.updateButtons();
+        }
+    }
+
+    goToPage(pageNumber) {
+        const targetPage = Math.max(0, Math.min(pageNumber, this.totalPages - 1));
+
+        if (targetPage > this.currentPage) {
+            // Flip forward
+            for (let i = this.currentPage; i < targetPage; i++) {
+                this.flipPage(i);
+            }
+        } else if (targetPage < this.currentPage) {
+            // Flip backward
+            for (let i = this.currentPage - 1; i >= targetPage; i--) {
+                this.unflipPage(i);
+            }
+        }
+
+        this.currentPage = targetPage;
+        this.updateIndicators();
+        this.updateButtons();
+    }
+
+    flipPage(index) {
+        if (this.pages[index]) {
+            this.pages[index].classList.add('flipped');
+        }
+    }
+
+    unflipPage(index) {
+        if (this.pages[index]) {
+            this.pages[index].classList.remove('flipped');
+        }
+    }
+
+    updateIndicators() {
+        this.currentPageIndicator.textContent = this.currentPage + 1;
+        this.totalPagesIndicator.textContent = this.totalPages;
+    }
+
+    updateButtons() {
+        // Disable prev button on first page
+        if (this.currentPage === 0) {
+            this.prevBtn.disabled = true;
+        } else {
+            this.prevBtn.disabled = false;
+        }
+
+        // Disable next button on last page
+        if (this.currentPage === this.totalPages - 1) {
+            this.nextBtn.disabled = true;
+        } else {
+            this.nextBtn.disabled = false;
+        }
+    }
+}
+
+// ========================================
 // INITIALIZATION
 // ========================================
 
@@ -352,4 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize mobile menu
     new MobileMenu();
+
+    // Initialize flip book
+    new FlipBook();
 });
