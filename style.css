@@ -267,7 +267,47 @@ h6 {
     background-color: #3B2618;
     z-index: 1000;
     box-shadow: var(--shadow-sm);
-    transition: background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.6s ease,
+        transform 0.6s ease;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Hidden state during catalog animation */
+.navbar.hidden-catalog {
+    opacity: 0;
+    transform: translateY(-100%);
+    pointer-events: none;
+}
+
+/* Chocolate color when returning after catalog */
+.navbar.after-catalog {
+    background-color: #3B2618 !important;
+}
+
+/* Override wave overlay for after-catalog */
+.navbar.after-catalog::before {
+    opacity: 0 !important;
+}
+
+/* Ensure after-catalog logo colors are correct (white logo visible) */
+.navbar.after-catalog .navbar__logo-white {
+    opacity: 1 !important;
+}
+
+.navbar.after-catalog .navbar__logo-brown {
+    opacity: 0 !important;
+}
+
+/* Ensure after-catalog link colors are white */
+.navbar.after-catalog .navbar__links a {
+    color: var(--color-white) !important;
+}
+
+/* Ensure after-catalog hamburger lines are white */
+.navbar.after-catalog .navbar__hamburger-line {
+    background-color: var(--color-white) !important;
 }
 
 /* Wave overlay for smooth color transition */
@@ -504,6 +544,19 @@ h6 {
     .navbar.scrolled .navbar__links a::after {
         background-color: var(--color-primary);
     }
+
+    /* After-catalog mobile menu styles */
+    .navbar.after-catalog .navbar__links {
+        background-color: #3B2618 !important;
+    }
+
+    .navbar.after-catalog .navbar__links a {
+        color: var(--color-white) !important;
+    }
+
+    .navbar.after-catalog .navbar__links a::after {
+        background-color: var(--color-white) !important;
+    }
 }
 
 /* ========================================
@@ -691,8 +744,8 @@ h6 {
     padding: 0;
     margin: 0;
     position: relative;
-    height: 250vh;
-    /* Scroll track */
+    height: 180vh;
+    /* Scroll track for scrollytelling animation - reduced for faster page flipping */
     background-color: var(--color-background);
 }
 
@@ -703,23 +756,21 @@ h6 {
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
+    align-items: center;
     overflow: hidden;
+    padding: var(--spacing-md) var(--spacing-md) var(--spacing-md);
 }
 
 .catalog__title {
+    font-family: var(--font-heading);
     font-size: 48px;
     font-weight: 700;
     text-align: center;
-    margin-bottom: var(--spacing-sm);
-    color: var(--color-primary);
-}
-
-.catalog__subtitle {
-    text-align: center;
-    margin-bottom: var(--spacing-xl);
-    font-size: 20px;
-    color: var(--color-primary);
+    margin-top: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+    color: #3B2618;
+    flex-shrink: 0;
 }
 
 /* Flip Book Container */
@@ -728,23 +779,26 @@ h6 {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: var(--spacing-xl) 0;
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background-color: var(--color-background);
+    flex-shrink: 1;
+    min-height: 0;
 }
 
 .flipbook__wrapper {
     position: relative;
     width: 100%;
-    max-width: 1200px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .flipbook__book {
     position: relative;
-    width: 900px;
-    height: 600px;
+    width: min(70vw, 800px);
+    height: min(46.67vw, 533px);
+    /* Maintains 3:2 aspect ratio */
+    max-width: 800px;
+    max-height: 533px;
     margin: 0 auto;
     perspective: 2000px;
     transform-style: preserve-3d;
@@ -780,6 +834,11 @@ h6 {
 
 .flipbook__page[data-page="2"] {
     z-index: 1;
+}
+
+/* When flipped, pages should go behind unflipped pages */
+.flipbook__page.flipped {
+    z-index: 0 !important;
 }
 
 /* Page Front and Back Faces */
@@ -1026,10 +1085,15 @@ h6 {
 
 /* Mobile Responsive - Flip Book */
 @media (max-width: 768px) {
+    .catalog__title {
+        font-size: 32px;
+        margin-bottom: var(--spacing-md);
+    }
+
     .flipbook__book {
-        width: 90vw;
-        max-width: 500px;
-        height: 400px;
+        width: min(85vw, 450px);
+        height: min(56.67vw, 300px);
+        /* Maintains 3:2 aspect ratio */
     }
 
     .flipbook__cover-logo {
@@ -1071,44 +1135,51 @@ h6 {
 }
 
 @media (max-width: 480px) {
+    .catalog__title {
+        font-size: 24px;
+        margin-bottom: var(--spacing-sm);
+    }
+
     .flipbook__book {
-        height: 350px;
+        width: min(90vw, 360px);
+        height: min(60vw, 240px);
+        /* Maintains 3:2 aspect ratio */
     }
 
     .flipbook__cover-logo {
-        width: 120px;
+        width: 100px;
     }
 
     .flipbook__cover-title {
-        font-size: 28px;
-    }
-
-    .flipbook__cover-subtitle {
-        font-size: 14px;
-    }
-
-    .flipbook__product-image {
-        height: 120px;
-    }
-
-    .flipbook__product-placeholder {
-        font-size: 50px;
-    }
-
-    .flipbook__product-title {
-        font-size: 20px;
-    }
-
-    .flipbook__product-description {
-        font-size: 13px;
-    }
-
-    .flipbook__product-price {
         font-size: 24px;
     }
 
+    .flipbook__cover-subtitle {
+        font-size: 12px;
+    }
+
+    .flipbook__product-image {
+        height: 100px;
+    }
+
+    .flipbook__product-placeholder {
+        font-size: 40px;
+    }
+
+    .flipbook__product-title {
+        font-size: 18px;
+    }
+
+    .flipbook__product-description {
+        font-size: 12px;
+    }
+
+    .flipbook__product-price {
+        font-size: 20px;
+    }
+
     .flipbook__page-content {
-        padding: var(--spacing-md);
+        padding: var(--spacing-sm);
     }
 }
 
