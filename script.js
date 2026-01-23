@@ -243,25 +243,18 @@ class CustomCursor {
         this.cursor = document.querySelector('.custom-cursor');
         if (!this.cursor) return;
 
-        this.mouse = { x: 0, y: 0 };
-        this.pos = { x: 0, y: 0 };
-        this.speed = 0.15; // Lerp speed (0.1 = slow, 1 = instant)
-
         this.init();
     }
 
     init() {
-        // Track mouse position
+        // Track mouse position and update cursor immediately
         document.addEventListener('mousemove', (e) => {
-            this.mouse.x = e.clientX;
-            this.mouse.y = e.clientY;
+            this.cursor.style.left = `${e.clientX}px`;
+            this.cursor.style.top = `${e.clientY}px`;
         });
 
         // Detect hover on interactive elements
         this.addHoverListeners();
-
-        // Start animation loop
-        this.animate();
     }
 
     addHoverListeners() {
@@ -279,18 +272,7 @@ class CustomCursor {
         });
     }
 
-    animate() {
-        // Lerp (linear interpolation) for smooth following
-        this.pos.x += (this.mouse.x - this.pos.x) * this.speed;
-        this.pos.y += (this.mouse.y - this.pos.y) * this.speed;
 
-        // Update cursor position
-        this.cursor.style.left = `${this.pos.x}px`;
-        this.cursor.style.top = `${this.pos.y}px`;
-
-        // Continue animation loop
-        requestAnimationFrame(() => this.animate());
-    }
 }
 
 // ========================================
@@ -423,14 +405,7 @@ class FlipBook {
         this.prevBtn.addEventListener('click', () => this.previousPage());
         this.nextBtn.addEventListener('click', () => this.nextPage());
 
-        // Add click event to pages for flipping
-        this.pages.forEach((page, index) => {
-            page.addEventListener('click', () => {
-                if (!page.classList.contains('flipped')) {
-                    this.goToPage(index + 1);
-                }
-            });
-        });
+        // Click interaction on pages removed - only scroll animation works
 
         console.log('FlipBook initialized with', this.totalPages, 'pages');
     }
