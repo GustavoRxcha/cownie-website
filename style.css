@@ -1167,56 +1167,163 @@ h6 {
 }
 
 /* ========================================
-   SOCIAL SECTION
+   SOCIAL & CONTACT SECTION
    ======================================== */
 
 .social {
-    padding: var(--spacing-2xl) 0;
-    background-color: var(--color-light-accent);
+    padding: 0;
     margin: 0;
+    min-height: 80vh;
+    background-color: var(--color-light-accent);
+    display: flex;
+    align-items: center;
 }
 
 .social__container {
-    text-align: center;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--spacing-xl) var(--spacing-md);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-2xl);
+    width: 100%;
+    align-items: start;
+}
+
+/* Left Side - Instagram */
+.social__left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .social__title {
+    font-family: var(--font-heading);
     font-size: 48px;
     font-weight: 700;
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-xl);
     color: var(--color-primary);
 }
 
-.social__subtitle {
-    margin-bottom: var(--spacing-lg);
-    font-size: 20px;
-    color: var(--color-primary);
+.social__instagram-post {
+    display: block;
+    text-decoration: none;
+    max-width: 500px;
 }
 
-.social__links {
+.social__image-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+}
+
+.social__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.social__image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    transition: background-color 0.4s ease;
+    pointer-events: none;
+}
+
+.social__instagram-post:hover .social__image {
+    transform: scale(1.1);
+}
+
+.social__instagram-post:hover .social__image-overlay {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.social__username {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-top: var(--spacing-xs);
+    margin-left: var(--spacing-xs);
+}
+
+/* Right Side - Contact */
+.social__right {
     display: flex;
-    justify-content: center;
-    gap: var(--spacing-md);
+    flex-direction: column;
+    align-items: flex-start;
 }
 
-.social__link {
+.social__whatsapp {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    width: 80px;
-    height: 80px;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-lg);
     background-color: var(--color-white);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-md);
-    font-size: 16px;
+    text-decoration: none;
+    color: #3B2618;
+    font-size: 20px;
     font-weight: 600;
-    color: var(--color-primary);
+    transition: all 0.3s ease;
+    max-width: 300px;
+    margin-bottom: var(--spacing-xl);
 }
 
-.social__link:hover {
-    transform: scale(1.1) rotate(5deg);
-    box-shadow: var(--shadow-lg);
+.social__whatsapp:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
     background-color: var(--color-accent);
+}
+
+.social__whatsapp-icon {
+    width: 32px;
+    height: 32px;
+    color: #3B2618;
+}
+
+.social__email-form {
+    background-color: var(--color-white);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.social__form-placeholder {
+    font-size: 16px;
+    color: var(--color-primary);
+    opacity: 0.7;
+    text-align: center;
+    margin: 0;
+}
+
+/* Mobile Responsive */
+@media (max-width: 968px) {
+    .social__container {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-xl);
+    }
+
+    .social__title {
+        font-size: 36px;
+    }
+
+    .social__instagram-post {
+        max-width: 100%;
+    }
+
+    .social__whatsapp {
+        max-width: 100%;
+    }
 }
 
 /* ========================================
@@ -1224,7 +1331,7 @@ h6 {
    ======================================== */
 
 .footer {
-    padding: var(--spacing-lg) 0;
+    padding: var(--spacing-md) 0;
     background-color: var(--color-primary);
     color: var(--color-background);
     margin: 0;
