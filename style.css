@@ -1088,24 +1088,43 @@ h6 {
         font-size: 16px;
     }
 
-    .flipbook__product-image {
-        height: 150px;
-    }
-
-    .flipbook__product-placeholder {
-        font-size: 60px;
-    }
-
-    .flipbook__product-title {
-        font-size: 22px;
+    .flipbook__page-content {
+        padding: var(--spacing-sm) !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        /* Reorder elements: Title (1), Image (2), Price (3) */
     }
 
     .flipbook__product-description {
-        font-size: 14px;
+        display: none !important;
+    }
+
+    .flipbook__product-image {
+        order: 2;
+        width: 100%;
+        height: auto;
+        max-height: 15vh;
+        /* Responsive height constraint */
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .flipbook__product-info {
+        display: contents;
+        /* Allows children to be direct flex items of parent for reordering */
+    }
+
+    .flipbook__product-title {
+        order: 1;
+        font-size: 24px;
+        margin-bottom: var(--spacing-sm);
+        flex-grow: 0;
     }
 
     .flipbook__product-price {
+        order: 3;
         font-size: 28px;
+        margin-top: var(--spacing-xs);
     }
 
     .flipbook__control {
@@ -1182,7 +1201,7 @@ h6 {
     padding: 0;
     margin: 0;
     min-height: 80vh;
-    background-color: var(--color-light-accent);
+    background: linear-gradient(to bottom, var(--color-background) 0%, var(--color-light-accent) 15%, var(--color-light-accent) 100%);
     display: flex;
     align-items: center;
 }
