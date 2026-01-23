@@ -1057,9 +1057,16 @@ h6 {
 
 /* Mobile Responsive - Flip Book */
 @media (max-width: 768px) {
+    .catalog__container {
+        justify-content: center;
+    }
+
     .catalog__title {
-        font-size: 32px;
-        margin-bottom: var(--spacing-md);
+        font-size: 44px;
+        line-height: 1.1;
+        margin-bottom: var(--spacing-lg);
+        max-width: 300px;
+        word-spacing: 100vw;
     }
 
     .flipbook__book {
