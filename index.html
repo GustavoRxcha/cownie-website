@@ -121,27 +121,27 @@
                             <!-- Book Container -->
                             <div class="flipbook__book" id="flipBook">
 
-                                <!-- Page 1: Cover (Front) / Cookie de Chocolate (Back) -->
+                                <!-- Page 0: Cover (Front) / Inner Cover Clean (Back) -->
                                 <div class="flipbook__page" data-page="0">
-                                    <!-- Front: Cover -->
+                                    <!-- Front: Cover - Chocolate with White Logo -->
                                     <div class="flipbook__page-front">
                                         <div class="flipbook__page-content flipbook__page-content--cover">
-                                            <img src="assets/images/cownie_logo_brown.svg" alt="Cownie Logo"
+                                            <img src="assets/images/cownie_logo_white.svg" alt="Cownie Logo"
                                                 class="flipbook__cover-logo">
-                                            <h3 class="flipbook__cover-title">Cownie</h3>
-                                            <p class="flipbook__cover-subtitle">Cookies e Brownies Artesanais</p>
-                                            <div class="flipbook__cover-hint">
-                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2"
-                                                        stroke-linecap="round" stroke-linejoin="round" />
-                                                </svg>
-                                                <span>Clique para folhear</span>
-                                            </div>
+                                            <p class="flipbook__cover-subtitle">Cookies e Brownies</p>
                                         </div>
                                     </div>
-                                    <!-- Back: Cookie de Chocolate -->
+                                    <!-- Back: Inner Cover - Clean Chocolate -->
                                     <div class="flipbook__page-back">
+                                        <div class="flipbook__page-content flipbook__page-content--inner-cover">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Page 1: Cookie de Chocolate (Front) / Brownie Tradicional (Back) -->
+                                <div class="flipbook__page" data-page="1">
+                                    <!-- Front: Cookie de Chocolate -->
+                                    <div class="flipbook__page-front">
                                         <div class="flipbook__page-content">
                                             <div class="flipbook__product-image">
                                                 <div class="flipbook__product-placeholder">
@@ -155,16 +155,11 @@
                                                     fora e macia por dentro.
                                                 </p>
                                                 <p class="flipbook__product-price">R$ 8,00</p>
-                                                <button class="flipbook__product-button">Encomendar</button>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-
-                                <!-- Page 2: Brownie Tradicional (Front) / Cookie Red Velvet (Back) -->
-                                <div class="flipbook__page" data-page="1">
-                                    <!-- Front: Brownie Tradicional -->
-                                    <div class="flipbook__page-front">
+                                    <!-- Back: Brownie Tradicional -->
+                                    <div class="flipbook__page-back">
                                         <div class="flipbook__page-content">
                                             <div class="flipbook__product-image">
                                                 <div class="flipbook__product-placeholder">
@@ -178,12 +173,15 @@
                                                     intenso.
                                                 </p>
                                                 <p class="flipbook__product-price">R$ 10,00</p>
-                                                <button class="flipbook__product-button">Encomendar</button>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- Back: Cookie Red Velvet -->
-                                    <div class="flipbook__page-back">
+                                </div>
+
+                                <!-- Page 2: Cookie Red Velvet (Front) / Em breve novos sabores (Back) -->
+                                <div class="flipbook__page" data-page="2">
+                                    <!-- Front: Cookie Red Velvet -->
+                                    <div class="flipbook__page-front">
                                         <div class="flipbook__page-content">
                                             <div class="flipbook__product-image">
                                                 <div class="flipbook__product-placeholder">
@@ -197,25 +195,27 @@
                                                     irresistível.
                                                 </p>
                                                 <p class="flipbook__product-price">R$ 9,00</p>
-                                                <button class="flipbook__product-button">Encomendar</button>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <!-- Back: Em breve novos sabores -->
+                                    <div class="flipbook__page-back">
+                                        <div class="flipbook__page-content flipbook__page-content--coming-soon">
+                                            <p class="flipbook__coming-soon-text">Em breve novos sabores</p>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Page 3: Back Cover (Front) / Empty (Back) -->
-                                <div class="flipbook__page flipbook__page--last" data-page="2">
-                                    <!-- Front: Back Cover -->
+                                <!-- Page 3: Inner Back Cover Clean (Front) / Back Cover Chocolate (Back) -->
+                                <div class="flipbook__page flipbook__page--last" data-page="3">
+                                    <!-- Front: Inner Back Cover - Clean Chocolate -->
                                     <div class="flipbook__page-front">
-                                        <div class="flipbook__page-content flipbook__page-content--back">
-                                            <h3 class="flipbook__back-title">Cownie</h3>
-                                            <p class="flipbook__back-text">Feito com amor ❤️</p>
-                                            <p class="flipbook__back-contact">@cownie.oficial</p>
+                                        <div class="flipbook__page-content flipbook__page-content--inner-back-cover">
                                         </div>
                                     </div>
-                                    <!-- Back: Empty (not visible) -->
+                                    <!-- Back: Back Cover - Chocolate (not visible) -->
                                     <div class="flipbook__page-back">
-                                        <div class="flipbook__page-content">
+                                        <div class="flipbook__page-content flipbook__page-content--back-cover">
                                         </div>
                                     </div>
                                 </div>
@@ -233,7 +233,7 @@
                                     </svg>
                                 </button>
                                 <div class="flipbook__page-indicator">
-                                    <span id="currentPage">1</span> / <span id="totalPages">3</span>
+                                    <span id="currentPage">1</span> / <span id="totalPages">4</span>
                                 </div>
                                 <button class="flipbook__control flipbook__control--next" id="nextPage"
                                     aria-label="Próxima página">
